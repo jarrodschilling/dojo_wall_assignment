@@ -8,11 +8,6 @@ bcrypt = Bcrypt(app)
 def home():
     return render_template('index.html')
 
-@app.route('/wall')
-def wall():
-    if 'user_id' not in session:
-        return redirect('/')
-    return render_template('wall.html')
 
 @app.route('/login', methods=['POST'])
 def login():

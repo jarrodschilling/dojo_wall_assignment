@@ -1,0 +1,20 @@
+from flask_app import app
+from flask import render_template, redirect, session, request, flash
+from flask_app.models.post import Post
+
+
+@app.route('/wall')
+def wall():
+    if 'user_id' not in session:
+        return redirect('/')
+    posts = Post.all_posts()
+    return render_template('wall.html', posts=posts)
+
+@app.route('/post', methods=['POST'])
+def new_post():
+    data = {
+        'content': request.form['post_content'],
+        'user_id': session['user_id']
+    }
+    a_post = Post.save(data)
+    return redirect('/wall')

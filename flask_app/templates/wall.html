@@ -21,16 +21,16 @@
     <form action="/post" method="post">
         <div class="mb-3">
             <label for="post_content" class="form-label">*Post content must not be blank</label>
-            <textarea class="form-control" id="post_content" rows="3"></textarea>
+            <textarea class="form-control" id="post_content" rows="3" name="post_content"></textarea>
             <button type="submit" class="btn btn-primary mb-3">Publish</button>
         </div>
     </form>
 
-    <ol class="list-group list-group-numbered">
+    <ol class="list-group list-group">
         <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
-                <div class="fw-bold">Message</div>
-                Content for list item
+                <div class="fw-bold">{{name}} - {{date}}</div>
+                {{content}}
             </div>
             <span class="badge bg-primary rounded-pill">14</span>
         </li>
