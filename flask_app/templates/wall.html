@@ -18,6 +18,13 @@
         </div>
     </nav>
     <h3>What's on your mind? Create a new post:</h3>
+        {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p><strong>{{message}}</strong></p>
+                    {% endfor %}
+                {% endif %}
+        {% endwith %}
     <form action="/post" method="post">
         <div class="mb-3">
             <label for="post_content" class="form-label">*Post content must not be blank</label>
@@ -33,13 +40,24 @@
                 <div class="fw-bold">{{post.first_name}} - {{post.created_at}}</div>
                 {{post.content}}
             </div>
+            
+            {% if post.user_id == session['user_id'] %}
             <form action="/post/delete" method="post">
                 <div class="mb-3">
                     <input type="hidden" name="post_id" value="{{post.id}}">
                     <button type="submit" class="btn btn-primary mb-3">Delete</button>
                 </div>
             </form>
+            {% endif %}
         </li>
+        <li class="list-group-item align-items-start">
+            <div class="ms-2 me-auto">
+                <form action="/comment" method="post">
+                    <label for="comment_content" class="form-label">Post a comment</label>
+                    <textarea class="form-control" id="comment_content" rows="1" name="comment_content"></textarea>    
+                    <button type="submit" class="btn btn-primary mb-3">Comment</button>
+                </form>
+            </div>
         {% endfor %}
     </ol>
 </body>

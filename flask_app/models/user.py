@@ -44,10 +44,10 @@ class User:
     @staticmethod
     def validate_user(user):
         is_valid = True
-        if len(user['first_name']) < 1:
+        if len(user['first_name']) < 2:
             flash("First name cannot be blank", 'reg')
             is_valid = False
-        if len(user['last_name']) < 1:
+        if len(user['last_name']) < 2:
             flash("Last name cannot be blank", 'reg')
             is_valid = False
         if not EMAIL_REGEX.match(user['email']):

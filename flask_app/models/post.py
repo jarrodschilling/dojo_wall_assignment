@@ -20,9 +20,9 @@ class Post:
     
     @classmethod
     def all_posts(cls):
-        query = "SELECT * FROM posts LEFT JOIN users ON users.id = posts.user_id;"
+        query = "SELECT * FROM posts LEFT JOIN users ON users.id = posts.user_id ORDER BY posts.created_at DESC;"
         results = connectToMySQL(cls.db).query_db(query)
-        # print(results)
+        print(results)
         posts = []
 
         for row in results:
@@ -30,6 +30,7 @@ class Post:
                 "id": row['id'],
                 "content": row['content'],
                 "first_name": row['first_name'],
+                "user_id": row['user_id'],
                 "created_at": row['created_at']
             }
             print(post_data)
@@ -44,3 +45,11 @@ class Post:
             'id': data['post_id']
         }
         return connectToMySQL(cls.db).query_db(query, delete_data)
+    
+    @staticmethod
+    def validate_post(post):
+        is_valid = True
+        if len(post['post_content']) < 1:
+            flash("Post cannot be blank")
+            is_valid = False
+        return is_valid

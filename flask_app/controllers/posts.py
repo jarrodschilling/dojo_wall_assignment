@@ -12,6 +12,8 @@ def wall():
 
 @app.route('/post', methods=['POST'])
 def new_post():
+    if not Post.validate_post(request.form):
+        return redirect('/wall')
     data = {
         'content': request.form['post_content'],
         'user_id': session['user_id']
