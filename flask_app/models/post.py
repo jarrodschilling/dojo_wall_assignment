@@ -11,7 +11,7 @@ class Post:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         self.user = None
-        self.comment = []
+        self.comments = []
 
     @classmethod
     def save(cls, data):
@@ -20,10 +20,13 @@ class Post:
     
     @classmethod
     def all_posts(cls):
-        query = "SELECT * FROM posts LEFT JOIN users ON users.id = posts.user_id ORDER BY posts.created_at DESC;"
+        query = """SELECT * FROM posts LEFT JOIN users ON users.id = posts.user_id 
+                LEFT JOIN comments ON comments.user_id = users.id 
+                ORDER BY posts.created_at DESC;"""
         results = connectToMySQL(cls.db).query_db(query)
-        print(results)
+        # print(results)
         posts = []
+        comments = []
 
         for row in results:
             post_data = {
@@ -35,8 +38,20 @@ class Post:
             }
             print(post_data)
             posts.append(post_data)
-        
-        return posts
+
+            if row['comments.id'] != None:
+                comment_data = {
+                    "id": row['comments.id'],
+                    "content": row['comments.content'],
+                    "first_name": row['users.first_name'],
+                    "user_id": row['comments.user_id'],
+                    "post_id": row['id'],
+                    "created_at": row['comments.created_at']
+                }
+                print(comment_data)
+                comments.append(comment_data)
+            
+        return posts, comments
     
     @classmethod
     def delete_post(cls, data):
