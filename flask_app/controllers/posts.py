@@ -18,3 +18,8 @@ def new_post():
     }
     a_post = Post.save(data)
     return redirect('/wall')
+
+@app.route('/post/delete', methods=['POST'])
+def delete_post():
+    delete = Post.delete_post(request.form)
+    return redirect('/wall')

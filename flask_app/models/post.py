@@ -22,11 +22,12 @@ class Post:
     def all_posts(cls):
         query = "SELECT * FROM posts LEFT JOIN users ON users.id = posts.user_id;"
         results = connectToMySQL(cls.db).query_db(query)
-        print(results)
+        # print(results)
         posts = []
 
         for row in results:
             post_data = {
+                "id": row['id'],
                 "content": row['content'],
                 "first_name": row['first_name'],
                 "created_at": row['created_at']
@@ -35,3 +36,11 @@ class Post:
             posts.append(post_data)
         
         return posts
+    
+    @classmethod
+    def delete_post(cls, data):
+        query = "DELETE FROM posts WHERE id = %(id)s;"
+        delete_data = {
+            'id': data['post_id']
+        }
+        return connectToMySQL(cls.db).query_db(query, delete_data)

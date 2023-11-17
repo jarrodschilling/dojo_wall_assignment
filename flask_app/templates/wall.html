@@ -27,13 +27,20 @@
     </form>
 
     <ol class="list-group list-group">
+        {% for post in posts %}
         <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
-                <div class="fw-bold">{{name}} - {{date}}</div>
-                {{content}}
+                <div class="fw-bold">{{post.first_name}} - {{post.created_at}}</div>
+                {{post.content}}
             </div>
-            <span class="badge bg-primary rounded-pill">14</span>
+            <form action="/post/delete" method="post">
+                <div class="mb-3">
+                    <input type="hidden" name="post_id" value="{{post.id}}">
+                    <button type="submit" class="btn btn-primary mb-3">Delete</button>
+                </div>
+            </form>
         </li>
+        {% endfor %}
     </ol>
 </body>
 </html>
