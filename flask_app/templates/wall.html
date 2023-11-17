@@ -50,16 +50,16 @@
             </form>
             {% endif %}
         </li>
-        {% for comment in comments %}
-            {% if comment.post_id == post.id %}
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">{{comment.first_name}} - {{comment.created_at}}</div>
-                        {{comment.content}}
-                    </div>
-                </li>
-            {% endif %}
-        {% endfor %}
+            {% for comment in comments %}
+                {% if comment.post_id == post.id %}
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">{{comment.first_name}} - {{comment.created_at}}</div>
+                            {{comment.content}}
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
         <li class="list-group-item align-items-start">
             <div class="ms-2 me-auto">
                 <form action="/comment" method="post">

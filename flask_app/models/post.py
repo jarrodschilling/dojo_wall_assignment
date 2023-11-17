@@ -24,34 +24,36 @@ class Post:
                 LEFT JOIN comments ON comments.user_id = users.id 
                 ORDER BY posts.created_at DESC;"""
         results = connectToMySQL(cls.db).query_db(query)
-        # print(results)
+        print(results)
         posts = []
-        comments = []
-
         for row in results:
-            post_data = {
-                "id": row['id'],
-                "content": row['content'],
-                "first_name": row['first_name'],
-                "user_id": row['user_id'],
-                "created_at": row['created_at']
-            }
-            print(post_data)
-            posts.append(post_data)
-
-            if row['comments.id'] != None:
-                comment_data = {
-                    "id": row['comments.id'],
-                    "content": row['comments.content'],
-                    "first_name": row['users.first_name'],
-                    "user_id": row['comments.user_id'],
-                    "post_id": row['id'],
-                    "created_at": row['comments.created_at']
+            if not posts or posts[-1].id != row['id']:
+                new_post = cls(row)
+                posts.append(new_post)
+                post_data = {
+                    'id': row['users.id'],
+                    'first_name': row['first_name'],
+                    'last_name': row['last_name'],
+                    'email': row['email'],
+                    'password': row['password'],
+                    'created_at': row['users.created_at'],
+                    'updated_at': row['users.updated_at'],
+                    'post': row['content']
                 }
-                print(comment_data)
-                comments.append(comment_data)
+                new_post.user = user.User(post_data)
             
-        return posts, comments
+            if row['comments.id']:
+                comment_data = {
+                    'id': row['comments.id'],
+                    'comment': row['comments.content'],                    
+                    'user_id': row['comments.user_id'],
+                    'post_id': row['post_id'],
+                    'created_at': row['comments.created_at'],
+                    'updated_at': row['comments.updated_at']
+                }
+                new_post.comments.append(user.User(comment_data))
+            
+        return posts
     
     @classmethod
     def delete_post(cls, data):

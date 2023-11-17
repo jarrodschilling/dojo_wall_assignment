@@ -13,6 +13,9 @@ class User:
         self.password = data['password']
         self.created_at = data['created_at']
         self.udpated_at = data['updated_at']
+        self.posts = []
+        self.comments = []
+
         
     @classmethod
     def save(cls, data):
