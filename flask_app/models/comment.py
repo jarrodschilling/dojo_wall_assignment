@@ -11,6 +11,7 @@ class Comment:
         self.post_id = data['post_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        self.user = None
 
 
     @classmethod

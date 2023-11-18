@@ -12,9 +12,7 @@ class User:
         self.email = data['email']
         self.password = data['password']
         self.created_at = data['created_at']
-        self.udpated_at = data['updated_at']
-        self.posts = []
-        self.comments = []
+        self.updated_at = data['updated_at']
 
         
     @classmethod

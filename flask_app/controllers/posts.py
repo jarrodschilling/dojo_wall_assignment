@@ -7,8 +7,8 @@ from flask_app.models.post import Post
 def wall():
     if 'user_id' not in session:
         return redirect('/')
-    posts, comments = Post.all_posts()
-    return render_template('wall.html', posts=posts, comments=comments)
+    posts = Post.all_posts()
+    return render_template('wall.html', posts=posts)
 
 @app.route('/post', methods=['POST'])
 def new_post():

@@ -20,17 +20,19 @@ class Post:
     
     @classmethod
     def all_posts(cls):
-        query = """SELECT * FROM posts LEFT JOIN users ON users.id = posts.user_id 
-                LEFT JOIN comments ON comments.user_id = users.id 
+        query = """SELECT * FROM posts 
+                LEFT JOIN users ON users.id = posts.user_id 
+                LEFT JOIN comments ON comments.post_id = posts.id 
+                LEFT JOIN users AS commers ON commers.id = comments.user_id
                 ORDER BY posts.created_at DESC;"""
         results = connectToMySQL(cls.db).query_db(query)
-        print(results)
+        # print(results)
         posts = []
         for row in results:
             if not posts or posts[-1].id != row['id']:
                 new_post = cls(row)
                 posts.append(new_post)
-                post_data = {
+                user_data = {
                     'id': row['users.id'],
                     'first_name': row['first_name'],
                     'last_name': row['last_name'],
@@ -38,21 +40,32 @@ class Post:
                     'password': row['password'],
                     'created_at': row['users.created_at'],
                     'updated_at': row['users.updated_at'],
-                    'post': row['content']
                 }
-                new_post.user = user.User(post_data)
+                new_post.user = user.User(user_data)
             
             if row['comments.id']:
+                commer_data = {
+                    'id': row['commers.id'],
+                    'first_name': row['commers.first_name'],
+                    'last_name': row['commers.last_name'],
+                    'email': row['commers.email'],
+                    'password': row['commers.password'],
+                    'created_at': row['commers.created_at'],
+                    'updated_at': row['commers.updated_at']
+                }
+                
                 comment_data = {
                     'id': row['comments.id'],
-                    'comment': row['comments.content'],                    
+                    'content': row['comments.content'],                    
                     'user_id': row['comments.user_id'],
                     'post_id': row['post_id'],
                     'created_at': row['comments.created_at'],
                     'updated_at': row['comments.updated_at']
                 }
-                new_post.comments.append(user.User(comment_data))
-            
+                a_comment = comment.Comment(comment_data)
+                a_comment.user = user.User(commer_data)
+                new_post.comments.append(a_comment)
+        print(posts[0].comments[0].user.first_name)
         return posts
     
     @classmethod
