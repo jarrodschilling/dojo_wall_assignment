@@ -8,6 +8,7 @@ def wall():
     if 'user_id' not in session:
         return redirect('/')
     posts = Post.all_posts()
+    print(posts[0])
     return render_template('wall.html', posts=posts)
 
 @app.route('/post', methods=['POST'])
