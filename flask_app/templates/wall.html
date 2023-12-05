@@ -17,57 +17,59 @@
             </div>
         </div>
     </nav>
-    <h3>What's on your mind? Create a new post:</h3>
-        {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <p><strong>{{message}}</strong></p>
-                    {% endfor %}
-                {% endif %}
-        {% endwith %}
-    <form action="/post" method="post">
-        <div class="mb-3">
-            <label for="post_content" class="form-label">*Post content must not be blank</label>
-            <textarea class="form-control" id="post_content" rows="3" name="post_content"></textarea>
-            <button type="submit" class="btn btn-primary mb-3">Publish</button>
-        </div>
-    </form>
-
-    <ol class="list-group list-group">
-        {% for post in posts %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">{{post.user.first_name}} - {{post.created_at}}</div>
-                {{post.content}}
-            </div>
-            
-            {% if post.user_id == session['user_id'] %}
-            <form action="/post/delete" method="post">
-                <div class="mb-3">
-                    <input type="hidden" name="post_id" value="{{post.id}}">
-                    <button type="submit" class="btn btn-primary mb-3">Delete</button>
-                </div>
-            </form>
-            {% endif %}
-        </li>
-            {% for comment in post.comments %}
-                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div class="fw-bold">{{comment.user.first_name}} - {{comment.created_at}}</div>
-                            {{comment.content}}
-                        </div>
-                    </li>
-            {% endfor %}
-        <li class="list-group-item align-items-start">
-            <div class="ms-2 me-auto">
-                <form action="/comment" method="post">
-                    <label for="comment_content" class="form-label">Post a comment</label>
-                    <input type="hidden" name="comment_post_id" value="{{ post.id }}">
-                    <textarea class="form-control" id="comment_content" rows="1" name="comment_content"></textarea>    
-                    <button type="submit" class="btn btn-primary mb-3">Comment</button>
+    <div class="container"></div>
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <h3>What's on your mind? Create a new post:</h3>
+                    {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <p><strong>{{message}}</strong></p>
+                                {% endfor %}
+                            {% endif %}
+                    {% endwith %}
+                <form action="/post" method="post">
+                    <div class="mb-3">
+                        <label for="post_content" class="form-label">*Post content must not be blank</label>
+                        <textarea class="form-control" id="post_content" rows="3" name="post_content"></textarea>
+                        <button type="submit" class="btn btn-primary mb-3">Publish</button>
+                    </div>
                 </form>
             </div>
+        </div>
+
+        {% for post in posts %}
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <h3>{{post.user.first_name}} - {{post.created_at.strftime('%B %d')}}</h3>
+                <div class="row">
+                    <p class="js-post">{{post.content}}</p>
+                    {% if post.user_id == session['user_id'] %}
+                    <form action="/post/delete" method="post">
+                        <div class="mb-3">
+                            <input type="hidden" name="post_id" value="{{post.id}}">
+                            <button type="submit" class="btn btn-primary mb-3">Delete</button>
+                        </div>
+                    </form>
+                    {% endif %}
+                </div>
+                {% for comment in post.comments %}
+                <div class="row js-comment">
+                    <h4>{{comment.user.first_name}} - {{comment.created_at.strftime('%B %d')}}</h4>
+                    <p>{{comment.content}}</p>
+                </div>
+                {% endfor %}
+                <div class="row">
+                    <form action="/comment" method="post">
+                        <label for="comment_content" class="form-label js-purple">Post a comment</label>
+                        <input type="hidden" name="comment_post_id" value="{{ post.id }}">
+                        <textarea class="form-control" id="comment_content" rows="1" name="comment_content"></textarea>    
+                        <button type="submit" class="btn btn-primary mb-3 js-button">Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ol>
+    </div>
 </body>
 </html>
