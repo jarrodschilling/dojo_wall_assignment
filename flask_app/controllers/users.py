@@ -15,7 +15,7 @@ def login():
     "email": request.form.get('email')
     }
     user_in_db = User.get_user(data)
-    print(user_in_db)
+
     if not user_in_db:
         flash('Invalid Email/Password', 'login')
         return redirect('/')

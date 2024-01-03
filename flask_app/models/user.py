@@ -67,3 +67,4 @@ class User:
             flash("Passwords must match", 'reg')
             is_valid = False
         return is_valid
+    
